@@ -15,11 +15,25 @@ from src.user import User
     ]
 )
 def test_is_adult(age, expected):
-    pass
+    user = User(
+        user_id=1,
+        name="Alex",
+        age=age,
+        email="alex@test.com"
+    )
+    assert user.is_adult() == expected
 
 
 @allure.feature("User")
 @allure.story("to_dict")
 @allure.title("Convert user to dictionary")
 def test_to_dict(user):
-    pass
+    result = user.to_dict()
+
+    assert result == {
+        "id": 1,
+        "name": "Alex",
+        "age": 25,
+        "email": "alex@test.com"
+    }
+    

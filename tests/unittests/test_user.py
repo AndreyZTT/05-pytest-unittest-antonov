@@ -21,19 +21,26 @@ class TestUser(unittest.TestCase):
     @allure.story("is_adult")
     @allure.title("User older than 18 is adult")
     def test_is_adult_true(self):
-        pass
+        self.assertTrue(self.user.is_adult())
 
     @allure.story("is_adult")
     @allure.title("User younger than 18 is not adult")
     def test_is_adult_false(self):
-        pass
+        self.user.age = 17
+        self.assertFalse(self.user.is_adult())
 
     @allure.story("is_adult")
     @allure.title("User age 18 is adult")
     def test_is_adult_boundary(self):
-        pass
+        self.assertTrue(self.user.is_adult())
 
     @allure.story("to_dict")
     @allure.title("Convert user to dictionary")
     def test_to_dict(self):
-        pass
+        self.assertEqual(self.user.to_dict(), {
+            "id": 1,
+            "name": "Alex",
+            "age": 25,
+            "email": "alex@test.com"
+        }
+        )
