@@ -1,3 +1,4 @@
+"""Pytests for UserManager class."""
 import pytest
 import allure
 
@@ -6,32 +7,64 @@ from src.user import User
 
 @allure.feature("User Manager")
 @allure.story("Add user")
+@allure.title("Successfully add a user")
 def test_add_user(manager, user):
-    pass
+    """Тест добавления пользователя в менеджер."""
+    assert manager.get_user(user.id) is None
+    manager.add_user(user)
+    assert manager.get_user(user.id) == user
 
 
 @allure.feature("User Manager")
 @allure.story("Add user")
+@allure.title("Raise ValueError when adding a user with duplicate ID")
 def test_add_user_duplicate_id(manager):
-    pass
+    """Тест дубликата id пользователя в менеджере."""
+    user1 = User(
+        user_id=1,
+        name="Alex",
+        age=25,
+        email="alex@test.com"
+    )
+    user2 = User(
+            user_id=1,
+            name="Alex",
+            age=25,
+            email="alex@test.com"
+        )
+    manager.add_user(user1)
+    with pytest.raises(ValueError):
+        manager.add_user(user2)
 
 
 @allure.feature("User Manager")
 @allure.story("Add user")
+@allure.title("Raise TypeError for invalid user ID type: {invalid_id}")
 @pytest.mark.parametrize(
     "invalid_id",
     [
         "1",
         None,
-        1.5
+        1.5,
+        {},
+        []
     ]
 )
-def test_invalid_id(manager, invalid_id):
-    pass
+def test_invalid_id_type(manager, invalid_id):
+    """Тест добавления пользователя с недопустимым типом id."""
+    user = User(
+            user_id=invalid_id,
+            name="Alex",
+            age=25,
+            email="alex@test.com"
+        )
+    with pytest.raises(TypeError):
+        manager.add_user(user)
 
 
 @allure.feature("User Manager")
 @allure.story("Add user")
+@allure.title("Raise ValueError for invalid name: '{name}'")
 @pytest.mark.parametrize(
     "name",
     [
@@ -40,11 +73,44 @@ def test_invalid_id(manager, invalid_id):
     ]
 )
 def test_invalid_name(manager, name):
-    pass
+    """Тест добавления пользователя с недопустимым именем."""
+    user = User(
+                user_id=1,
+                name=name,
+                age=25,
+                email="alex@test.com"
+            )
+    with pytest.raises(ValueError):
+        manager.add_user(user)
 
 
 @allure.feature("User Manager")
 @allure.story("Add user")
+@allure.title("Raise TypeError for invalid name type: {name}")
+@pytest.mark.parametrize(
+    "name",
+    [
+        123,
+        1.5,
+        {},
+        []
+    ]
+)
+def test_invalid_name_type(manager, name):
+    """Тест добавления пользователя с недопустимым типом имени."""
+    user = User(
+                user_id=1,
+                name=name,
+                age=25,
+                email="alex@test.com"
+            )
+    with pytest.raises(TypeError):
+        manager.add_user(user)
+
+
+@allure.feature("User Manager")
+@allure.story("Add user")
+@allure.title("Raise ValueError for invalid age: {age}")
 @pytest.mark.parametrize(
     "age",
     [
@@ -53,53 +119,180 @@ def test_invalid_name(manager, name):
     ]
 )
 def test_invalid_age(manager, age):
-    pass
+    """Тест добавления пользователя с недопустимым возрастом."""
+    user = User(
+            user_id=1,
+            name="Alex",
+            age=age,
+            email="alex@test.com"
+        )
+    with pytest.raises(ValueError):
+        manager.add_user(user)
 
 
 @allure.feature("User Manager")
 @allure.story("Add user")
+@allure.title("Raise TypeError for invalid age type: {age}")
+@pytest.mark.parametrize(
+    "age",
+    [
+        "25",
+        None,
+        1.5,
+        {},
+        []
+    ]
+)
+def test_invalid_age_type(manager, age):
+    """Тест добавления пользователя с недопустимым типом возраста."""
+    user = User(
+            user_id=1,
+            name="Alex",
+            age=age,
+            email="alex@test.com"
+        )
+    with pytest.raises(TypeError):
+        manager.add_user(user)
+
+
+@allure.feature("User Manager")
+@allure.story("Add user")
+@allure.title("Raise TypeError for invalid email type: {email}")
 @pytest.mark.parametrize(
     "email",
     [
-        "test",
-        "gmail.com"
+        123,
+        1.5,
+        {},
+        []
+    ]
+)
+def test_invalid_email_type(manager, email):
+    """Тест добавления пользователя с недопустимым типом email."""
+    user = User(
+        user_id=1,
+        name="Alex",
+        age=25,
+        email=email
+    )
+
+    with pytest.raises(TypeError):
+        manager.add_user(user)
+
+
+@allure.feature("User Manager")
+@allure.story("Add user")
+@allure.title("Raise ValueError for invalid email: '{email}'")
+@pytest.mark.parametrize(
+    "email",
+    [
+        "alexexample.com",
+        "alex.example.com",
+        "alexexamplecom",
+        ""
     ]
 )
 def test_invalid_email(manager, email):
-    pass
+    """Тест добавления пользователя с недопустимым email."""
+    user = User(
+        user_id=1,
+        name="Alex",
+        age=25,
+        email=email
+    )
+    with pytest.raises(ValueError):
+        manager.add_user(user)
 
 
 @allure.feature("User Manager")
 @allure.story("Get user")
+@allure.title("Successfully retrieve an existing user")
 def test_get_existing_user(manager, user):
-    pass
+    """Тест получения существующего пользователя из менеджера."""
+    manager.add_user(user)
+    retrieved_user = manager.get_user(user.id)
+    assert retrieved_user == user
 
 
 @allure.feature("User Manager")
-@allure.story("Get user")
+@allure.story("Get user - missing user")
+@allure.title("Return None when retrieving a non-existing user")
 def test_get_missing_user(manager):
-    pass
+    """Тест получения отсутствующего пользователя из менеджера."""
+    retrieved_user = manager.get_user(777)
+    assert retrieved_user is None
 
 
 @allure.feature("User Manager")
 @allure.story("Remove user")
+@allure.title("Successfully remove an existing user")
 def test_remove_user(manager, user):
-    pass
+    """Тест удаления существующего пользователя из менеджера."""
+    manager.add_user(user)
+    manager.remove_user(user.id)
+    assert manager.get_user(user.id) is None
 
 
 @allure.feature("User Manager")
 @allure.story("Remove user")
+@allure.title("Raise ValueError when removing a non-existing user")
 def test_remove_missing_user(manager):
-    pass
+    """Тест удаления отсутствующего пользователя из менеджера."""
+    with pytest.raises(ValueError):
+        manager.remove_user(777)
 
 
 @allure.feature("User Manager")
 @allure.story("Get all users")
-def test_get_all_users(manager):
-    pass
+@allure.title("Successfully retrieve all users: {users}")
+@pytest.mark.parametrize(
+    "users",
+    [
+        [],
+        [User(1, "Alex", 25, "alex@example.com")],
+        [
+            User(1, "Alex", 25, "alex@example.com"),
+            User(2, "John", 30, "john@example.com"),
+            User(3, "David", 20, "david@example.com")
+        ],
+    ]
+)
+def test_get_all_users(manager, users):
+    """Тест получения всех пользователей из менеджера."""
+    for user in users:
+        manager.add_user(user)
+
+    result = manager.get_all_users()
+
+    assert result == users
 
 
 @allure.feature("User Manager")
 @allure.story("Count users")
-def test_count_users(manager):
-    pass
+@allure.title("Correctly count users: expected {expected_count}")
+@pytest.mark.parametrize(
+    "users, expected_count",
+    [
+        ([], 0),
+        (
+            [User(1, "Alex", 25, "alex@example.com")],
+            1
+        ),
+        (
+            [
+                User(1, "Alex", 25, "alex@example.com"),
+                User(2, "John", 30, "john@example.com"),
+                User(3, "David", 20, "david@example.com")
+            ],
+            3
+        ),
+    ]
+)
+def test_count_users(manager, users, expected_count):
+    """Тест подсчета количества пользователей в менеджере."""
+    for user in users:
+        manager.add_user(user)
+
+    result = manager.count_users()
+
+    assert result == expected_count
