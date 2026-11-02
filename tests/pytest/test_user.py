@@ -7,6 +7,7 @@ from src.user import User
 
 @allure.feature("User")
 @allure.story("is_adult")
+@allure.title("User age {age} is adult: {expected}")
 @pytest.mark.parametrize(
     "age, expected",
     [

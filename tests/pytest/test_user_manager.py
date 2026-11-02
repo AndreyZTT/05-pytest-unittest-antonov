@@ -7,6 +7,7 @@ from src.user import User
 
 @allure.feature("User Manager")
 @allure.story("Add user")
+@allure.title("Successfully add a user")
 def test_add_user(manager, user):
     """Тест добавления пользователя в менеджер."""
     assert manager.get_user(user.id) is None
@@ -15,7 +16,8 @@ def test_add_user(manager, user):
 
 
 @allure.feature("User Manager")
-@allure.story("Add user - duplicate id")
+@allure.story("Add user")
+@allure.title("Raise ValueError when adding a user with duplicate ID")
 def test_add_user_duplicate_id(manager):
     """Тест дубликата id пользователя в менеджере."""
     user1 = User(
@@ -36,7 +38,8 @@ def test_add_user_duplicate_id(manager):
 
 
 @allure.feature("User Manager")
-@allure.story("Add user - invalid id type")
+@allure.story("Add user")
+@allure.title("Raise TypeError for invalid user ID type: {invalid_id}")
 @pytest.mark.parametrize(
     "invalid_id",
     [
@@ -60,7 +63,8 @@ def test_invalid_id_type(manager, invalid_id):
 
 
 @allure.feature("User Manager")
-@allure.story("Add user - invalid name")
+@allure.story("Add user")
+@allure.title("Raise ValueError for invalid name: '{name}'")
 @pytest.mark.parametrize(
     "name",
     [
@@ -81,7 +85,8 @@ def test_invalid_name(manager, name):
 
 
 @allure.feature("User Manager")
-@allure.story("Add user - invalid name type")
+@allure.story("Add user")
+@allure.title("Raise TypeError for invalid name type: {name}")
 @pytest.mark.parametrize(
     "name",
     [
@@ -104,7 +109,8 @@ def test_invalid_name_type(manager, name):
 
 
 @allure.feature("User Manager")
-@allure.story("Add user - invalid age")
+@allure.story("Add user")
+@allure.title("Raise ValueError for invalid age: {age}")
 @pytest.mark.parametrize(
     "age",
     [
@@ -125,7 +131,8 @@ def test_invalid_age(manager, age):
 
 
 @allure.feature("User Manager")
-@allure.story("Add user - invalid age type")
+@allure.story("Add user")
+@allure.title("Raise TypeError for invalid age type: {age}")
 @pytest.mark.parametrize(
     "age",
     [
@@ -149,7 +156,8 @@ def test_invalid_age_type(manager, age):
 
 
 @allure.feature("User Manager")
-@allure.story("Add user - invalid email type")
+@allure.story("Add user")
+@allure.title("Raise TypeError for invalid email type: {email}")
 @pytest.mark.parametrize(
     "email",
     [
@@ -173,7 +181,8 @@ def test_invalid_email_type(manager, email):
 
 
 @allure.feature("User Manager")
-@allure.story("Add user - invalid email")
+@allure.story("Add user")
+@allure.title("Raise ValueError for invalid email: '{email}'")
 @pytest.mark.parametrize(
     "email",
     [
@@ -197,6 +206,7 @@ def test_invalid_email(manager, email):
 
 @allure.feature("User Manager")
 @allure.story("Get user")
+@allure.title("Successfully retrieve an existing user")
 def test_get_existing_user(manager, user):
     """Тест получения существующего пользователя из менеджера."""
     manager.add_user(user)
@@ -206,6 +216,7 @@ def test_get_existing_user(manager, user):
 
 @allure.feature("User Manager")
 @allure.story("Get user - missing user")
+@allure.title("Return None when retrieving a non-existing user")
 def test_get_missing_user(manager):
     """Тест получения отсутствующего пользователя из менеджера."""
     retrieved_user = manager.get_user(777)
@@ -214,6 +225,7 @@ def test_get_missing_user(manager):
 
 @allure.feature("User Manager")
 @allure.story("Remove user")
+@allure.title("Successfully remove an existing user")
 def test_remove_user(manager, user):
     """Тест удаления существующего пользователя из менеджера."""
     manager.add_user(user)
@@ -222,7 +234,8 @@ def test_remove_user(manager, user):
 
 
 @allure.feature("User Manager")
-@allure.story("Remove user - missing user")
+@allure.story("Remove user")
+@allure.title("Raise ValueError when removing a non-existing user")
 def test_remove_missing_user(manager):
     """Тест удаления отсутствующего пользователя из менеджера."""
     with pytest.raises(ValueError):
@@ -231,6 +244,7 @@ def test_remove_missing_user(manager):
 
 @allure.feature("User Manager")
 @allure.story("Get all users")
+@allure.title("Successfully retrieve all users: {users}")
 @pytest.mark.parametrize(
     "users",
     [
@@ -255,6 +269,7 @@ def test_get_all_users(manager, users):
 
 @allure.feature("User Manager")
 @allure.story("Count users")
+@allure.title("Correctly count users: expected {expected_count}")
 @pytest.mark.parametrize(
     "users, expected_count",
     [
